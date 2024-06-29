@@ -3,24 +3,28 @@ package com.moashraf.diaryapp.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.createGraph
+import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationScreen
 
 @Composable
 fun SetNavGraph(startDestination: String, navController: NavHostController) {
-    val navGraph = navController.createGraph(
+    NavHost(
+        navController = navController,
         startDestination = startDestination
     ) {
         authenticationRoute()
         homeRoute()
         writeRoute()
     }
-    navController.graph = navGraph
 }
 
 fun NavGraphBuilder.authenticationRoute() {
     composable(route = Screen.Authentication.route) {
-        // Add your composable content for home here
+        AuthenticationScreen(
+            loadingState = false,
+            onClick = {}
+        )
     }
 }
 
