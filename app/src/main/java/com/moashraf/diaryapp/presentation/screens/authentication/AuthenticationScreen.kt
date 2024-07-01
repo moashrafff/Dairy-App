@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import com.moashraf.diaryapp.utils.Constants.CLIENT_ID
 import com.stevdzasan.messagebar.ContentWithMessageBar
 import com.stevdzasan.messagebar.MessageBarState
-import com.stevdzasan.onetap.OneTapGoogleButton
 import com.stevdzasan.onetap.OneTapSignInState
 import com.stevdzasan.onetap.OneTapSignInWithGoogle
 
@@ -16,7 +15,9 @@ fun AuthenticationScreen(
     loadingState: Boolean,
     oneTapSignInState: OneTapSignInState,
     messageBarState: MessageBarState,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onTokenIdReceived: (String) -> Unit,
+    onDialogDismissed: (String) -> Unit
 ) {
     Scaffold(content = {
         ContentWithMessageBar(
@@ -32,10 +33,10 @@ fun AuthenticationScreen(
         clientId = CLIENT_ID,
         state = oneTapSignInState,
         onTokenIdReceived = { tokenId ->
-            messageBarState.addSuccess("SuccessFully signed")
+            onTokenIdReceived(tokenId)
         },
         onDialogDismissed = { message ->
-            messageBarState.addError(Exception(message))
+            onDialogDismissed(message)
         })
 }
 
