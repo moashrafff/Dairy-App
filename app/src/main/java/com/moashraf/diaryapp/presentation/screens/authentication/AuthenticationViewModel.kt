@@ -25,7 +25,7 @@ class AuthenticationViewModel : ViewModel() {
 
     fun signInWithGoogle(
         tokenID: String,
-        onSuccess: (Boolean) -> Unit,
+        onSuccess: () -> Unit,
         onError: (String) -> Unit,
     ) {
         viewModelScope.launch {
@@ -38,11 +38,15 @@ class AuthenticationViewModel : ViewModel() {
                         .loggedIn
                 }
                 withContext(Dispatchers.Main){
-                    onSuccess(result)
-                    setLoadingState(false)
-                    delay(600)
-                    authenticatedState.value = true
-
+                    if (result){
+                        onSuccess()
+                        setLoadingState(false)
+                        delay(600)
+                        authenticatedState.value = true
+                    }else{
+                        onError("User is not logged in.")
+                        setLoadingState(false)
+                    }
                 }
             } catch (e: Exception) {
                 onError(e.message.orEmpty())
