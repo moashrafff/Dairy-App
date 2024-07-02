@@ -7,12 +7,16 @@ import com.moashraf.diaryapp.utils.Constants.APP_ID
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.Credentials
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AuthenticationViewModel : ViewModel() {
 
     var loadingState = mutableStateOf(false)
+        private set
+
+    var authenticatedState = mutableStateOf(false)
         private set
 
     private fun setLoadingState(state: Boolean) {
@@ -36,6 +40,9 @@ class AuthenticationViewModel : ViewModel() {
                 withContext(Dispatchers.Main){
                     onSuccess(result)
                     setLoadingState(false)
+                    delay(600)
+                    authenticatedState.value = true
+
                 }
             } catch (e: Exception) {
                 onError(e.message.orEmpty())
