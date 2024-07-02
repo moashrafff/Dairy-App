@@ -60,9 +60,7 @@ fun HomeScreen(
                         )
                     }
                 },
-                content = {
-
-                }
+                content = {}
             )
         }
     )
