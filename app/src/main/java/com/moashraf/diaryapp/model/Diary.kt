@@ -14,7 +14,7 @@ import java.time.Instant
 @RequiresApi(Build.VERSION_CODES.O)
 class Diary : RealmObject {
     @PrimaryKey
-    var id: ObjectId = ObjectId.invoke()
+    var _id: ObjectId = ObjectId.invoke()
     var ownerId: String = ""
     var title : String = ""
     var description : String = ""
