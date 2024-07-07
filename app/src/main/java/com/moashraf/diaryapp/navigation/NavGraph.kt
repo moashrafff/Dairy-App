@@ -8,6 +8,7 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.moashraf.diaryapp.R
+import com.moashraf.diaryapp.data.repository.MongoDB
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
 import com.moashraf.diaryapp.presentation.screens.Home.components.DisplayAlertDialog
 import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationScreen
@@ -115,6 +117,9 @@ fun NavGraphBuilder.homeRoute(
                 signOutDialogOpened = true
             }
         )
+        LaunchedEffect(key1 = Unit) {
+            MongoDB.configureRealm()
+        }
         DisplayAlertDialog(
             title = "Sign Out",
             message = "Are you sure you want to Sign Out from your Google Account?",
@@ -123,14 +128,12 @@ fun NavGraphBuilder.homeRoute(
             onYesClicked = {
                 scope.launch(Dispatchers.IO) {
                     val user = App.create(APP_ID).currentUser
-                    if (user != null) {
-                        user.logOut()
+                    user?.logOut()
                         withContext(Dispatchers.Main) {
                             navigateToAuthentication()
                         }
                     }
                 }
-            }
         )
     }
 }

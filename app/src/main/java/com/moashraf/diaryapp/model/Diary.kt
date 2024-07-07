@@ -12,7 +12,7 @@ import org.mongodb.kbson.ObjectId
 import java.time.Instant
 
 @RequiresApi(Build.VERSION_CODES.O)
-class Diary : RealmObject {
+open class Diary : RealmObject {
     @PrimaryKey
     var _id: ObjectId = ObjectId.invoke()
     var ownerId: String = ""
