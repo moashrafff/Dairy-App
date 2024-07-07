@@ -132,7 +132,7 @@ fun NavGraphBuilder.homeRoute(
                         withContext(Dispatchers.Main) {
                             navigateToAuthentication()
                         }
-                    }
+                }
             }
         )
     }

@@ -15,11 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Locale
 
 @Composable
-fun DateHeader(localDate: LocalDateTime) {
+fun DateHeader(localDate: LocalDate) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
