@@ -133,7 +133,7 @@ fun NavGraphBuilder.homeRoute(
                             navigateToAuthentication()
                         }
                     }
-                }
+            }
         )
     }
 }
