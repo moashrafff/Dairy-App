@@ -1,6 +1,7 @@
 package com.moashraf.diaryapp.navigation
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
@@ -12,6 +13,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -20,6 +23,7 @@ import androidx.navigation.compose.composable
 import com.moashraf.diaryapp.R
 import com.moashraf.diaryapp.data.repository.MongoDB
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
+import com.moashraf.diaryapp.presentation.screens.Home.HomeViewModel
 import com.moashraf.diaryapp.presentation.screens.Home.components.DisplayAlertDialog
 import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationScreen
 import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationViewModel
@@ -30,6 +34,7 @@ import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.sql.Timestamp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -100,10 +105,14 @@ fun NavGraphBuilder.homeRoute(
     navigateToAuthentication: () -> Unit
 ) {
     composable(route = Screen.Home.route) {
+        val viewModel : HomeViewModel  = viewModel()
+        val diaries by viewModel.diaries
+
         var signOutDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         HomeScreen(
+            diaries = diaries,
             onMenuClicked = {
                 scope.launch {
                     drawerState.open()
@@ -115,9 +124,7 @@ fun NavGraphBuilder.homeRoute(
                 signOutDialogOpened = true
             }
         )
-        LaunchedEffect(key1 = Unit) {
-            MongoDB.configureRealm()
-        }
+
         DisplayAlertDialog(
             title = "Sign Out",
             message = "Are you sure you want to Sign Out from your Google Account?",
