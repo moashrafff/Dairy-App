@@ -27,7 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -62,31 +61,31 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
     var galleryLoading by remember { mutableStateOf(false) }
     val downloadedImages = remember { mutableStateListOf<Uri>() }
 
-    LaunchedEffect(key1 = galleryOpened) {
-        if (galleryOpened && downloadedImages.isEmpty()) {
-            galleryLoading = true
-//            fetchImagesFromFirebase(
-//                remoteImagePaths = diary.images,
-//                onImageDownload = { image ->
-//                    downloadedImages.add(image)
-//                },
-//                onImageDownloadFailed = {
-//                    Toast.makeText(
-//                        context,
-//                        "Images not uploaded yet." +
-//                                "Wait a little bit, or try uploading again.",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                    galleryLoading = false
-//                    galleryOpened = false
-//                },
-//                onReadyToDisplay = {
-//                    galleryLoading = false
-//                    galleryOpened = true
-//                }
-//            )
-        }
-    }
+//    LaunchedEffect(key1 = galleryOpened) {
+//        if (galleryOpened && downloadedImages.isEmpty()) {
+//            galleryLoading = true
+////            fetchImagesFromFirebase(
+////                remoteImagePaths = diary.images,
+////                onImageDownload = { image ->
+////                    downloadedImages.add(image)
+////                },
+////                onImageDownloadFailed = {
+////                    Toast.makeText(
+////                        context,
+////                        "Images not uploaded yet." +
+////                                "Wait a little bit, or try uploading again.",
+////                        Toast.LENGTH_SHORT
+////                    ).show()
+////                    galleryLoading = false
+////                    galleryOpened = false
+////                },
+////                onReadyToDisplay = {
+////                    galleryLoading = false
+////                    galleryOpened = true
+////                }
+////            )
+//        }
+//    }
 
     Row(modifier = Modifier
         .clickable(
@@ -140,7 +139,8 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
                     )
                 ) {
                     Column(modifier = Modifier.padding(all = 14.dp)) {
-                        Gallery(images = downloadedImages)
+//                        Gallery(images = downloadedImages)
+                        Gallery(images = diary.images)
                     }
                 }
             }
