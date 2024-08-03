@@ -1,11 +1,8 @@
 package com.moashraf.diaryapp.navigation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,8 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
@@ -36,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetNavGraph(startDestination: String, navController: NavHostController) {
     NavHost(
@@ -51,7 +47,8 @@ fun SetNavGraph(startDestination: String, navController: NavHostController) {
         homeRoute(
             navigateToWrite = {
                 navController.navigate(Screen.Write.route)
-            }, navigateToAuthentication = {
+            },
+            navigateToAuthentication = {
                 navController.popBackStack()
                 navController.navigate(Screen.Authentication.route)
             }
@@ -97,6 +94,7 @@ fun NavGraphBuilder.authenticationRoute(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.homeRoute(
     navigateToWrite: () -> Unit,
     navigateToAuthentication: () -> Unit
@@ -140,6 +138,6 @@ fun NavGraphBuilder.homeRoute(
 
 fun NavGraphBuilder.writeRoute() {
     composable(route = Screen.Write.route) {
-        // Add your composable content for write here
+
     }
 }
