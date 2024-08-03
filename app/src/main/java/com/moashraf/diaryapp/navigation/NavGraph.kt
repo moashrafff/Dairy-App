@@ -22,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.moashraf.diaryapp.R
 import com.moashraf.diaryapp.data.repository.MongoDB
+import com.moashraf.diaryapp.model.RequestState
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
 import com.moashraf.diaryapp.presentation.screens.Home.HomeViewModel
 import com.moashraf.diaryapp.presentation.screens.Home.components.DisplayAlertDialog
@@ -38,18 +39,24 @@ import java.sql.Timestamp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SetNavGraph(startDestination: String, navController: NavHostController) {
+fun SetNavGraph(
+    startDestination: String,
+    navController: NavHostController,
+    onDataLoaded : () -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
         authenticationRoute(
+            onDataLoaded = onDataLoaded,
             navigateToHome = {
                 navController.popBackStack()
                 navController.navigate(Screen.Home.route)
             }
         )
         homeRoute(
+            onDataLoaded = onDataLoaded,
             navigateToWrite = {
                 navController.navigate(Screen.Write.route)
             },
@@ -63,7 +70,8 @@ fun SetNavGraph(startDestination: String, navController: NavHostController) {
 }
 
 fun NavGraphBuilder.authenticationRoute(
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
+    onDataLoaded: () -> Unit
 ) {
     composable(route = Screen.Authentication.route) {
         val context = LocalContext.current
@@ -72,6 +80,11 @@ fun NavGraphBuilder.authenticationRoute(
         val viewModel: AuthenticationViewModel = viewModel()
         val loadingState by viewModel.loadingState
         val authenticatedState by viewModel.authenticatedState
+
+        LaunchedEffect(key1 = Unit) {
+            onDataLoaded()
+        }
+
         AuthenticationScreen(
             authenticationState = authenticatedState,
             loadingState = loadingState,
@@ -102,7 +115,8 @@ fun NavGraphBuilder.authenticationRoute(
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.homeRoute(
     navigateToWrite: () -> Unit,
-    navigateToAuthentication: () -> Unit
+    navigateToAuthentication: () -> Unit,
+    onDataLoaded : () -> Unit
 ) {
     composable(route = Screen.Home.route) {
         val viewModel : HomeViewModel  = viewModel()
@@ -111,6 +125,13 @@ fun NavGraphBuilder.homeRoute(
         var signOutDialogOpened by remember { mutableStateOf(false) }
         val scope = rememberCoroutineScope()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
+        LaunchedEffect(key1 = diaries) {
+            if (diaries !is RequestState.Loading)
+                onDataLoaded()
+
+        }
+
         HomeScreen(
             diaries = diaries,
             onMenuClicked = {

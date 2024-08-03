@@ -20,14 +20,24 @@ import io.realm.kotlin.mongodb.App
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : ComponentActivity() {
+    private var keepSplashOpened = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+        installSplashScreen().setKeepOnScreenCondition{
+            keepSplashOpened
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             DiaryAppTheme {
                 val navController = rememberNavController()
-                SetNavGraph(startDestination = getStartDestination(), navController = navController)
+                SetNavGraph(
+                    onDataLoaded = {
+                        keepSplashOpened = false
+                    },
+                    startDestination = getStartDestination(),
+                    navController = navController
+                )
             }
         }
     }
