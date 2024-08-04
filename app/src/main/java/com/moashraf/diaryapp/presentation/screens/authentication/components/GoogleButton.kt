@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.components
+package com.moashraf.diaryapp.presentation.screens.authentication.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing

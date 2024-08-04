@@ -1,9 +1,11 @@
 package com.moashraf.diaryapp
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.navigation.compose.rememberNavController
@@ -16,15 +18,26 @@ import io.realm.kotlin.mongodb.App
 
 @AndroidEntryPoint
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@RequiresApi(Build.VERSION_CODES.O)
 class MainActivity : ComponentActivity() {
+    private var keepSplashOpened = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
+        installSplashScreen().setKeepOnScreenCondition{
+            keepSplashOpened
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             DiaryAppTheme {
                 val navController = rememberNavController()
-                SetNavGraph(startDestination = getStartDestination(), navController = navController)
+                SetNavGraph(
+                    onDataLoaded = {
+                        keepSplashOpened = false
+                    },
+                    startDestination = getStartDestination(),
+                    navController = navController
+                )
             }
         }
     }
