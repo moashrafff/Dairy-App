@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.Home.components
+package com.moashraf.diaryapp.presentation.components
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
