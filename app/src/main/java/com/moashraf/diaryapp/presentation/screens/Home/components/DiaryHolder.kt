@@ -87,7 +87,8 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
 //        }
 //    }
 
-    Row(modifier = Modifier
+    Row(
+        modifier = Modifier
         .clickable(
             indication = null,
             interactionSource = remember {

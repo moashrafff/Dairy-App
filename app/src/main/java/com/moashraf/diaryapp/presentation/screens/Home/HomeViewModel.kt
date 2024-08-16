@@ -26,7 +26,6 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             MongoDB.getAllDiaries().collect { result ->
                 diaries.value = result
-                Log.e("TAG123", "homeRoute: " + result)
             }
         }
     }
