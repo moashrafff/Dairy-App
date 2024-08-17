@@ -1,7 +1,6 @@
 package com.moashraf.diaryapp.data.repository
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.RequestState
@@ -15,8 +14,7 @@ import io.realm.kotlin.query.Sort
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
-import java.time.LocalDate
+import org.mongodb.kbson.ObjectId
 import java.time.ZoneId
 
 
@@ -60,6 +58,19 @@ object MongoDB : MongoDBRepository {
             }
         }else{
             flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
+        }
+    }
+
+    override fun getSelectedDiary(diaryId: ObjectId): RequestState<Diary> {
+        return if (user != null) {
+            try {
+                val diary = realm.query<Diary>( query = "_id == $0", diaryId).find().first()
+                RequestState.Success(diary)
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
         }
     }
 }

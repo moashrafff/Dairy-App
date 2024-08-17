@@ -196,12 +196,9 @@ fun NavGraphBuilder.writeRoute(
         val viewModel: WriteViewModel = viewModel()
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState(pageCount = {Mood.entries.size})
-        
-        LaunchedEffect(key1 = uiState) {
-            Log.e("TAG321", "writeRoute: " + uiState.selectedDiaryId )
-        }
-        
+
         WriteScreen(
+            uiState = uiState,
             selectedDiary = Diary().apply {
             title = "Diary Title"
             description = "Diary Description"
@@ -209,8 +206,8 @@ fun NavGraphBuilder.writeRoute(
             onBackPressed = onBackPressed,
             onDeleteConfirmed = {},
             pagerState = pagerState,
-            onTitleChanged = {},
-            onDescriptionChanged = {},
+            onTitleChanged = { viewModel.setTitle(it) },
+            onDescriptionChanged = { viewModel.setDescription(it) },
         )
     }
 }
