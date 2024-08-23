@@ -21,7 +21,7 @@ import java.time.ZoneId
 object MongoDB : MongoDBRepository {
     private val app = App.create(APP_ID)
     private val user = app.currentUser
-    private lateinit var  realm : Realm
+    private lateinit var realm: Realm
 
     init {
         configureRealm()
@@ -29,22 +29,22 @@ object MongoDB : MongoDBRepository {
 
     override fun configureRealm() {
         if (user != null) {
-            val config = SyncConfiguration.Builder(user, setOf(Diary::class))
-                .initialSubscriptions { sub ->
-                    add(
-                        query = sub.query<Diary>(query = "ownerId == $0", user.id),
-                        name = "User's Diaries"
-                    )
-                }
+            val config =
+                SyncConfiguration.Builder(user, setOf(Diary::class)).initialSubscriptions { sub ->
+                        add(
+                            query = sub.query<Diary>(query = "ownerId == $0", user.id),
+                            name = "User's Diaries"
+                        )
+                    }
 //                .log(LogLevel.ALL)
-                .build()
+                    .build()
             realm = Realm.open(config)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun getAllDiaries(): Flow<Diaries> {
-        return if (user != null){
+        return if (user != null) {
             try {
                 realm.query<Diary>(query = "ownerId == $0", user.id)
                     .sort(property = "date", sortOrder = Sort.DESCENDING).asFlow().map { result ->
@@ -52,26 +52,64 @@ object MongoDB : MongoDBRepository {
                             it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
                         })
                     }
-            }
-            catch (e : Exception){
+            } catch (e: Exception) {
                 flow { emit(RequestState.Error(e)) }
             }
-        }else{
+        } else {
             flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
         }
     }
 
-    override fun getSelectedDiary(diaryId: ObjectId): RequestState<Diary> {
+    override fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>> {
         return if (user != null) {
             try {
-                val diary = realm.query<Diary>( query = "_id == $0", diaryId).find().first()
-                RequestState.Success(diary)
+                realm.query<Diary>(query = "_id == $0", diaryId).asFlow().map {
+                    RequestState.Success(data = it.list.first())
+                }
             } catch (e: Exception) {
-                RequestState.Error(e)
+                flow { RequestState.Error(e) }
+            }
+        } else {
+            flow { RequestState.Error(UserNotAuthenticatedException()) }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun addNewDiary(diary: Diary): RequestState<Diary> {
+        return if (user != null) {
+            realm.write {
+                try {
+                    val addedDiary = copyToRealm(diary.apply { ownerId = user.id })
+                    RequestState.Success(addedDiary)
+                } catch (e: Exception) {
+                    RequestState.Error(e)
+                }
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    override suspend fun updateDiary(diary: Diary): RequestState<Diary> {
+        return if (user != null) {
+            realm.write {
+                val queriedDiary = query<Diary>(query = "_id == $0", diary._id).first().find()
+                if (queriedDiary != null) {
+                    queriedDiary.title = diary.title
+                    queriedDiary.description = diary.description
+                    queriedDiary.mood = diary.mood
+                    queriedDiary.images = diary.images
+                    queriedDiary.date = diary.date
+                    RequestState.Success(data = queriedDiary)
+                } else {
+                    RequestState.Error(error = Exception("Queried Diary does not exist."))
+                }
             }
         } else {
             RequestState.Error(UserNotAuthenticatedException())
         }
     }
 }
+
 private class UserNotAuthenticatedException : Exception("User is not Logged in.")

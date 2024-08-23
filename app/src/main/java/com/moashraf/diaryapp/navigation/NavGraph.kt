@@ -1,7 +1,6 @@
 package com.moashraf.diaryapp.navigation
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
@@ -9,14 +8,13 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -25,7 +23,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.moashraf.diaryapp.R
-import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.model.RequestState
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
@@ -40,7 +37,6 @@ import com.moashraf.diaryapp.utils.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import io.realm.kotlin.mongodb.App
-import io.realm.kotlin.types.RealmList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -196,18 +192,26 @@ fun NavGraphBuilder.writeRoute(
         val viewModel: WriteViewModel = viewModel()
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState(pageCount = {Mood.entries.size})
+        val pagerNumber by remember { derivedStateOf{pagerState.currentPage} }
 
         WriteScreen(
             uiState = uiState,
-            selectedDiary = Diary().apply {
-            title = "Diary Title"
-            description = "Diary Description"
-            mood = Mood.Happy.name },
             onBackPressed = onBackPressed,
             onDeleteConfirmed = {},
             pagerState = pagerState,
             onTitleChanged = { viewModel.setTitle(it) },
             onDescriptionChanged = { viewModel.setDescription(it) },
+            moodName = { Mood.entries[pagerNumber].name },
+            onDateTimeUpdated = { viewModel.updateDateTime(zonedDateTime = it) },
+            onSaveClicked = {
+                viewModel.upsertDiary(
+                    diary = it.apply { mood = Mood.entries[pagerNumber].name },
+                    onSuccess = onBackPressed,
+                    onError = {
+
+                    }
+                )
+            }
         )
     }
 }

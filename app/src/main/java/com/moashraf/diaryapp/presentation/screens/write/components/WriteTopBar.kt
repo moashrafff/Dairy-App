@@ -5,7 +5,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -25,23 +26,68 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import com.maxkeppeker.sheets.core.models.base.rememberSheetState
+import com.maxkeppeler.sheets.calendar.CalendarDialog
+import com.maxkeppeler.sheets.calendar.models.CalendarConfig
+import com.maxkeppeler.sheets.calendar.models.CalendarSelection
+import com.maxkeppeler.sheets.clock.ClockDialog
+import com.maxkeppeler.sheets.clock.models.ClockSelection
 import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.presentation.components.DisplayAlertDialog
+import com.moashraf.diaryapp.utils.toInstant
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteTopBar (
+fun WriteTopBar(
     selectedDiary: Diary?,
-    onBackPressed: () -> Unit,
-    onDeleteConfirmed: () -> Unit
+    moodName: () -> String,
+    onDateTimeUpdated: (ZonedDateTime) -> Unit,
+    onDeleteConfirmed: () -> Unit,
+    onBackPressed: () -> Unit
 ) {
+    var currentDate by remember { mutableStateOf(LocalDate.now()) }
+    var currentTime by remember { mutableStateOf(LocalTime.now()) }
+    val dateDialog = rememberSheetState()
+    val timeDialog = rememberSheetState()
+    val formattedDate = remember(key1 = currentDate) {
+        DateTimeFormatter
+            .ofPattern("dd MMM yyyy")
+            .format(currentDate).uppercase()
+    }
+    val formattedTime = remember(key1 = currentTime) {
+        DateTimeFormatter
+            .ofPattern("hh:mm a")
+            .format(currentTime).uppercase()
+    }
+    var dateTimeUpdated by remember { mutableStateOf(false) }
+    val selectedDiaryDateTime = remember(selectedDiary) {
+        if (selectedDiary != null) {
+            DateTimeFormatter.ofPattern("dd MMM yyyy, hh:mm a", Locale.getDefault())
+                .withZone(ZoneId.systemDefault())
+                .format(selectedDiary.date.toInstant())
+        } else "Unknown"
+    }
     CenterAlignedTopAppBar(
+        navigationIcon = {
+            IconButton(onClick = onBackPressed) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = "Back Arrow Icon"
+                )
+            }
+        },
         title = {
             Column {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Happy",
+                    text = moodName(),
                     style = TextStyle(
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         fontWeight = FontWeight.Bold
@@ -50,34 +96,73 @@ fun WriteTopBar (
                 )
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Date 3ade",
+                    text = if (selectedDiary != null && dateTimeUpdated) "$formattedDate, $formattedTime"
+                    else if (selectedDiary != null) selectedDiaryDateTime
+                    else "$formattedDate, $formattedTime",
                     style = TextStyle(fontSize = MaterialTheme.typography.bodySmall.fontSize),
                     textAlign = TextAlign.Center
                 )
             }
         },
-        navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back Button")
-            }
-        },
         actions = {
-            IconButton(onClick = {
-
-            }) {
-                Icon(
-                    imageVector = Icons.Default.DateRange,
-                    contentDescription = "Date Icon",
-                    tint = MaterialTheme.colorScheme.onSurface
-                )
+            if (dateTimeUpdated) {
+                IconButton(onClick = {
+                    currentDate = LocalDate.now()
+                    currentTime = LocalTime.now()
+                    dateTimeUpdated = false
+                    onDateTimeUpdated(
+                        ZonedDateTime.of(
+                            currentDate,
+                            currentTime,
+                            ZoneId.systemDefault()
+                        )
+                    )
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Close,
+                        contentDescription = "Close Icon",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+            } else {
+                IconButton(onClick = { dateDialog.show() }) {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Date Icon",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
             }
-
             if (selectedDiary != null) {
                 DeleteDiaryAction(
                     selectedDiary = selectedDiary,
                     onDeleteConfirmed = onDeleteConfirmed
                 )
             }
+        }
+    )
+
+    CalendarDialog(
+        state = dateDialog,
+        selection = CalendarSelection.Date { localDate ->
+            currentDate = localDate
+            timeDialog.show()
+        },
+        config = CalendarConfig(monthSelection = true, yearSelection = true)
+    )
+
+    ClockDialog(
+        state = timeDialog,
+        selection = ClockSelection.HoursMinutes { hours, minutes ->
+            currentTime = LocalTime.of(hours, minutes)
+            dateTimeUpdated = true
+            onDateTimeUpdated(
+                ZonedDateTime.of(
+                    currentDate,
+                    currentTime,
+                    ZoneId.systemDefault()
+                )
+            )
         }
     )
 }

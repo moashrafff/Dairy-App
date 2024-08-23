@@ -8,11 +8,11 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.presentation.screens.write.components.WriteContent
 import com.moashraf.diaryapp.presentation.screens.write.components.WriteTopBar
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -20,30 +20,37 @@ import com.moashraf.diaryapp.presentation.screens.write.components.WriteTopBar
 @Composable
 fun WriteScreen(
     uiState: UiState,
-    selectedDiary: Diary?,
     pagerState: PagerState,
+    moodName : () -> String,
     onBackPressed: () -> Unit,
+    onDateTimeUpdated: (ZonedDateTime) -> Unit,
     onDeleteConfirmed: () -> Unit,
     onTitleChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
-) {
+    onSaveClicked: (Diary) -> Unit,
+
+    ) {
     LaunchedEffect(key1 = uiState.mood) {
         pagerState.scrollToPage(Mood.valueOf(uiState.mood.name).ordinal)
     }
     Scaffold(topBar = {
         WriteTopBar(
-            selectedDiary = selectedDiary,
+            selectedDiary = uiState.selectedDiary,
             onBackPressed = onBackPressed,
-            onDeleteConfirmed = onDeleteConfirmed
+            onDeleteConfirmed = onDeleteConfirmed,
+            moodName = moodName,
+            onDateTimeUpdated = onDateTimeUpdated
         )
     }, content = { paddingValues ->
         WriteContent(
+            uiState = uiState,
             pagerState = pagerState,
             title = uiState.title,
             onTitleChanged = onTitleChanged,
             description = uiState.description,
             onDescriptionChanged = onDescriptionChanged,
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
+            onSaveClicked = onSaveClicked
         )
     })
 }

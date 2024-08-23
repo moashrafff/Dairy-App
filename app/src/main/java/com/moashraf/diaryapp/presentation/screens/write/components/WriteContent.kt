@@ -1,7 +1,8 @@
 package com.moashraf.diaryapp.presentation.screens.write.components
 
-import android.net.Uri
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,13 +41,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.Mood
+import com.moashraf.diaryapp.presentation.screens.write.UiState
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WriteContent(
-//    uiState: UiState,
+    uiState: UiState,
     pagerState: PagerState,
 //    galleryState: GalleryState,
     title: String,
@@ -54,7 +58,7 @@ fun WriteContent(
     description: String,
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
-//    onSaveClicked: (Diary) -> Unit,
+    onSaveClicked: (Diary) -> Unit,
 //    onImageSelect: (Uri) -> Unit,
 //    onImageClicked: (GalleryImage) -> Unit
 ) {
@@ -167,21 +171,21 @@ fun WriteContent(
                     .fillMaxWidth()
                     .height(54.dp),
                 onClick = {
-//                    if (uiState.title.isNotEmpty() && uiState.description.isNotEmpty()) {
-//                        onSaveClicked(
-//                            Diary().apply {
-//                                this.title = uiState.title
-//                                this.description = uiState.description
+                    if (uiState.title.isNotEmpty() && uiState.description.isNotEmpty()) {
+                        onSaveClicked(
+                            Diary().apply {
+                                this.title = uiState.title
+                                this.description = uiState.description
 //                                this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
-//                            }
-//                        )
-//                    } else {
-//                        Toast.makeText(
-//                            context,
-//                            "Fields cannot be empty.",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
+                            }
+                        )
+                    } else {
+                        Toast.makeText(
+                            context,
+                            "Fields cannot be empty.",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 },
                 shape = Shapes().small
             ) {
