@@ -1,6 +1,7 @@
 package com.moashraf.diaryapp.data.repository
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.RequestState
@@ -11,9 +12,11 @@ import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import io.realm.kotlin.query.Sort
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import org.mongodb.kbson.ObjectId
 import java.time.ZoneId
 
@@ -47,10 +50,13 @@ object MongoDB : MongoDBRepository {
         return if (user != null) {
             try {
                 realm.query<Diary>(query = "ownerId == $0", user.id)
-                    .sort(property = "date", sortOrder = Sort.DESCENDING).asFlow().map { result ->
-                        RequestState.Success(data = result.list.groupBy {
+                    .sort(property = "date", sortOrder = Sort.DESCENDING)
+                    .asFlow()
+                    .mapLatest { result ->
+                        val groupedDiaries = result.list.groupBy {
                             it.date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()
-                        })
+                        }
+                        RequestState.Success(data = groupedDiaries)
                     }
             } catch (e: Exception) {
                 flow { emit(RequestState.Error(e)) }
@@ -60,6 +66,36 @@ object MongoDB : MongoDBRepository {
         }
     }
 
+    override suspend fun deleteDiary(id: ObjectId): RequestState<Boolean> {
+        return if (user != null) {
+            try {
+                realm.write {
+                    val diary =
+                        query<Diary>(query = "_id == $0 AND ownerId == $1", id, user.id)
+                            .first().find()
+                    if (diary != null) {
+                        try {
+                            // Log before deletion
+                            delete(diary)
+                            // Log after successful deletion
+                            RequestState.Success(data = true)
+                        } catch (e: Exception) {
+                            RequestState.Error(e)
+                        }
+                    } else {
+                        RequestState.Error(Exception("Diary does not exist."))
+                    }
+                }
+            } catch (e: Exception) {
+                RequestState.Error(e)
+            }
+        } else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+
+
     override fun getSelectedDiary(diaryId: ObjectId): Flow<RequestState<Diary>> {
         return if (user != null) {
             try {
@@ -67,10 +103,10 @@ object MongoDB : MongoDBRepository {
                     RequestState.Success(data = it.list.first())
                 }
             } catch (e: Exception) {
-                flow { RequestState.Error(e) }
+                flow { emit(RequestState.Error(e)) }
             }
         } else {
-            flow { RequestState.Error(UserNotAuthenticatedException()) }
+            flow { emit(RequestState.Error(UserNotAuthenticatedException())) }
         }
     }
 
@@ -110,6 +146,8 @@ object MongoDB : MongoDBRepository {
             RequestState.Error(UserNotAuthenticatedException())
         }
     }
+
+
 }
 
 private class UserNotAuthenticatedException : Exception("User is not Logged in.")

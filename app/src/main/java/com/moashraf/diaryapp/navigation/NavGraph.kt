@@ -1,6 +1,8 @@
 package com.moashraf.diaryapp.navigation
 
 import android.os.Build
+import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.rememberPagerState
@@ -15,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -131,12 +134,13 @@ fun NavGraphBuilder.homeRoute(
     onDataLoaded : () -> Unit
 ) {
     composable(route = Screen.Home.route) {
-        val viewModel : HomeViewModel  = viewModel()
-        val diaries by viewModel.diaries
 
-        var signOutDialogOpened by remember { mutableStateOf(false) }
-        val scope = rememberCoroutineScope()
+        val viewModel: HomeViewModel = viewModel()
+        val diaries by viewModel.diaries
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+        val scope = rememberCoroutineScope()
+        val context = LocalContext.current
+        var signOutDialogOpened by remember { mutableStateOf(false) }
 
         LaunchedEffect(key1 = diaries) {
             if (diaries !is RequestState.Loading)
@@ -190,6 +194,7 @@ fun NavGraphBuilder.writeRoute(
         })
     ) {
         val viewModel: WriteViewModel = viewModel()
+        val context = LocalContext.current
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState(pageCount = {Mood.entries.size})
         val pagerNumber by remember { derivedStateOf{pagerState.currentPage} }
@@ -197,18 +202,40 @@ fun NavGraphBuilder.writeRoute(
         WriteScreen(
             uiState = uiState,
             onBackPressed = onBackPressed,
-            onDeleteConfirmed = {},
             pagerState = pagerState,
             onTitleChanged = { viewModel.setTitle(it) },
             onDescriptionChanged = { viewModel.setDescription(it) },
             moodName = { Mood.entries[pagerNumber].name },
             onDateTimeUpdated = { viewModel.updateDateTime(zonedDateTime = it) },
+            onDeleteConfirmed = {
+                viewModel.deleteDiary(
+                    onSuccess = {
+                        Toast.makeText(
+                            context,
+                            "Diary deleted Successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        onBackPressed()
+                    },
+                    onError = { error ->
+                        Toast.makeText(
+                            context,
+                            error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                )
+            },
             onSaveClicked = {
                 viewModel.upsertDiary(
                     diary = it.apply { mood = Mood.entries[pagerNumber].name },
                     onSuccess = onBackPressed,
-                    onError = {
-
+                    onError = { message ->
+                        Toast.makeText(
+                            context,
+                            message,
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 )
             }

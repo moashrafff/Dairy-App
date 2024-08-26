@@ -17,6 +17,7 @@ import com.moashraf.diaryapp.utils.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.moashraf.diaryapp.utils.toRealmInstant
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mongodb.kbson.ObjectId
@@ -27,7 +28,6 @@ import java.time.ZonedDateTime
 class WriteViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
 
     var uiState by mutableStateOf(UiState())
         private set
@@ -50,24 +50,40 @@ class WriteViewModel(
     }
 
     // Function to retrieve Diary
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun fetchSelectedDiary() {
         if (uiState.selectedDiaryId != null) {
-            viewModelScope.launch(Dispatchers.Main) {
-                MongoDB.getSelectedDiary(org.mongodb.kbson.ObjectId(uiState.selectedDiaryId!!))
+            viewModelScope.launch {
+                MongoDB.getSelectedDiary(diaryId = ObjectId.invoke(uiState.selectedDiaryId!!))
+                    .catch {
+                        emit(RequestState.Error(Exception("Diary is already deleted.")))
+                    }
                     .collect { diary ->
                         if (diary is RequestState.Success) {
-                            setSelectedDiary(diary.data)
-                            setTitle(diary.data.title)
-                            setDescription(diary.data.description)
-                            setMood(Mood.valueOf(diary.data.mood))
+                            setMood(mood = Mood.valueOf(diary.data.mood))
+                            setSelectedDiary(diary = diary.data)
+                            setTitle(title = diary.data.title)
+                            setDescription(description = diary.data.description)
+
+//                            fetchImagesFromFirebase(
+//                                remoteImagePaths = diary.data.images,
+//                                onImageDownload = { downloadedImage ->
+//                                    galleryState.addImage(
+//                                        GalleryImage(
+//                                            image = downloadedImage,
+//                                            remoteImagePath = extractImagePath(
+//                                                fullImageUrl = downloadedImage.toString()
+//                                            ),
+//                                        )
+//                                    )
+//                                }
+//                            )
                         }
                     }
             }
         }
     }
 
-    private fun setSelectedDiary(diary: Diary) {
+     private fun setSelectedDiary(diary: Diary) {
         uiState = uiState.copy(
             selectedDiary = diary
         )
@@ -123,7 +139,6 @@ class WriteViewModel(
             }
         }
     }
-
     private suspend fun updateDiary(
         diary: Diary,
         onSuccess: () -> Unit,
@@ -144,6 +159,27 @@ class WriteViewModel(
         } else {
             if (result is RequestState.Error) {
                 onError(result.error.message.toString())
+            }
+        }
+    }
+
+    fun deleteDiary(
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ){
+        viewModelScope.launch(Dispatchers.IO) {
+            if (uiState.selectedDiaryId != null) {
+                val result = MongoDB.deleteDiary(id = ObjectId.invoke(uiState.selectedDiaryId!!))
+
+                if (result is RequestState.Success) {
+                    withContext(Dispatchers.Main) {
+                        onSuccess()
+                    }
+                } else if (result is RequestState.Error) {
+                    withContext(Dispatchers.Main) {
+                        onError(result.error.message.toString())
+                    }
+                }
             }
         }
     }
