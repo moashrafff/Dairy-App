@@ -1,7 +1,6 @@
 package com.moashraf.diaryapp.data.repository
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.RequestState
@@ -12,7 +11,6 @@ import io.realm.kotlin.ext.query
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import io.realm.kotlin.query.Sort
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -75,9 +73,7 @@ object MongoDB : MongoDBRepository {
                             .first().find()
                     if (diary != null) {
                         try {
-                            // Log before deletion
                             delete(diary)
-                            // Log after successful deletion
                             RequestState.Success(data = true)
                         } catch (e: Exception) {
                             RequestState.Error(e)
