@@ -1,5 +1,6 @@
 package com.moashraf.diaryapp.presentation.screens.write.components
 
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -42,7 +43,10 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.moashraf.diaryapp.model.Diary
+import com.moashraf.diaryapp.model.GalleryImage
+import com.moashraf.diaryapp.model.GalleryState
 import com.moashraf.diaryapp.model.Mood
+import com.moashraf.diaryapp.presentation.components.GalleryUploader
 import com.moashraf.diaryapp.presentation.screens.write.UiState
 import kotlinx.coroutines.launch
 
@@ -52,15 +56,15 @@ import kotlinx.coroutines.launch
 fun WriteContent(
     uiState: UiState,
     pagerState: PagerState,
-//    galleryState: GalleryState,
+    galleryState: GalleryState,
     title: String,
     onTitleChanged: (String) -> Unit,
     description: String,
     onDescriptionChanged: (String) -> Unit,
     paddingValues: PaddingValues,
     onSaveClicked: (Diary) -> Unit,
-//    onImageSelect: (Uri) -> Unit,
-//    onImageClicked: (GalleryImage) -> Unit
+    onImageSelect: (Uri) -> Unit,
+    onImageClicked: (GalleryImage) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val scope = rememberCoroutineScope()
@@ -159,12 +163,12 @@ fun WriteContent(
 
         Column(verticalArrangement = Arrangement.Bottom) {
             Spacer(modifier = Modifier.height(12.dp))
-//            GalleryUploader(
-//                galleryState = galleryState,
-//                onAddClicked = { focusManager.clearFocus() },
-//                onImageSelect = onImageSelect,
-//                onImageClicked = onImageClicked
-//            )
+            GalleryUploader(
+                galleryState = galleryState,
+                onAddClicked = { focusManager.clearFocus() },
+                onImageSelect = onImageSelect,
+                onImageClicked = onImageClicked
+            )
             Spacer(modifier = Modifier.height(12.dp))
             Button(
                 modifier = Modifier

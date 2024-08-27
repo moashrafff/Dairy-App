@@ -1,7 +1,6 @@
 package com.moashraf.diaryapp.navigation
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -17,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -26,8 +24,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.moashraf.diaryapp.R
+import com.moashraf.diaryapp.model.GalleryImage
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.model.RequestState
+import com.moashraf.diaryapp.model.rememberGalleryState
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
 import com.moashraf.diaryapp.presentation.screens.Home.HomeViewModel
 import com.moashraf.diaryapp.presentation.components.DisplayAlertDialog
@@ -107,19 +107,26 @@ fun NavGraphBuilder.authenticationRoute(
             onClick = {
                 oneTapState.open()
             },
-            onTokenIdReceived = {
+            onSuccessfulFirebaseSignIn = {
                 viewModel.signInWithGoogle(
                     tokenID = it,
                     onSuccess = {
                         messageBarState.addSuccess(context.getString(R.string.successfully_authenticated))
+                        viewModel.setLoadingState(false)
                     },
                     onError = { exception ->
                         messageBarState.addError(Exception(exception))
+                        viewModel.setLoadingState(false)
                     }
                 )
             },
+            onFailedFirebaseSignIn = {
+                messageBarState.addError(it)
+                viewModel.setLoadingState(false)
+            },
             onDialogDismissed = { message ->
                 messageBarState.addError(Exception(message))
+                viewModel.setLoadingState(false)
             },
             navigateToHome = navigateToHome
         )
@@ -198,6 +205,7 @@ fun NavGraphBuilder.writeRoute(
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState(pageCount = {Mood.entries.size})
         val pagerNumber by remember { derivedStateOf{pagerState.currentPage} }
+        val galleryState = rememberGalleryState()
 
         WriteScreen(
             uiState = uiState,
@@ -238,7 +246,17 @@ fun NavGraphBuilder.writeRoute(
                         ).show()
                     }
                 )
-            }
+            },
+            galleryState = galleryState,
+            onImageSelect = {
+                galleryState.addImage(
+                    galleryImage = GalleryImage(
+                        image = it,
+                        remoteImagePath = ""
+                    )
+                )
+            },
+
         )
     }
 }
