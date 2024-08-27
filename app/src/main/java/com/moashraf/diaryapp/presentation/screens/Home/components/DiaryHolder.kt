@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.Mood
+import com.moashraf.diaryapp.presentation.components.Gallery
 import com.moashraf.diaryapp.ui.theme.Elevation
 import com.moashraf.diaryapp.utils.toInstant
 import java.time.Instant
@@ -87,7 +88,8 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
 //        }
 //    }
 
-    Row(modifier = Modifier
+    Row(
+        modifier = Modifier
         .clickable(
             indication = null,
             interactionSource = remember {

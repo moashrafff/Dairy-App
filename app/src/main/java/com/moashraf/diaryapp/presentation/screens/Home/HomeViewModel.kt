@@ -11,6 +11,8 @@ import com.moashraf.diaryapp.data.repository.Diaries
 import com.moashraf.diaryapp.data.repository.MongoDB
 import com.moashraf.diaryapp.model.RequestState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -26,7 +28,6 @@ class HomeViewModel : ViewModel() {
         viewModelScope.launch {
             MongoDB.getAllDiaries().collect { result ->
                 diaries.value = result
-                Log.e("TAG123", "homeRoute: " + result)
             }
         }
     }

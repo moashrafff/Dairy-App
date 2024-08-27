@@ -19,7 +19,7 @@ class AuthenticationViewModel : ViewModel() {
     var authenticatedState = mutableStateOf(false)
         private set
 
-    private fun setLoadingState(state: Boolean) {
+    fun setLoadingState(state: Boolean) {
         loadingState.value = state
     }
 
