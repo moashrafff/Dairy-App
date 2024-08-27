@@ -1,6 +1,7 @@
 package com.moashraf.diaryapp.navigation
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -205,7 +206,7 @@ fun NavGraphBuilder.writeRoute(
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState(pageCount = {Mood.entries.size})
         val pagerNumber by remember { derivedStateOf{pagerState.currentPage} }
-        val galleryState = rememberGalleryState()
+        val galleryState = viewModel.galleryState
 
         WriteScreen(
             uiState = uiState,
@@ -249,11 +250,10 @@ fun NavGraphBuilder.writeRoute(
             },
             galleryState = galleryState,
             onImageSelect = {
-                galleryState.addImage(
-                    galleryImage = GalleryImage(
-                        image = it,
-                        remoteImagePath = ""
-                    )
+                val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
+                viewModel.addImage(
+                    image = it,
+                    imageType = type
                 )
             },
 
