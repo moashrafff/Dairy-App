@@ -48,6 +48,7 @@ import com.moashraf.diaryapp.model.GalleryState
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.presentation.components.GalleryUploader
 import com.moashraf.diaryapp.presentation.screens.write.UiState
+import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -180,7 +181,7 @@ fun WriteContent(
                             Diary().apply {
                                 this.title = uiState.title
                                 this.description = uiState.description
-//                                this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
+                                this.images = galleryState.images.map { it.remoteImagePath }.toRealmList()
                             }
                         )
                     } else {

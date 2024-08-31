@@ -2,6 +2,7 @@ package com.moashraf.diaryapp.presentation.screens.Home.components
 
 import android.net.Uri
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -27,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +48,7 @@ import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.presentation.components.Gallery
 import com.moashraf.diaryapp.ui.theme.Elevation
+import com.moashraf.diaryapp.utils.fetchImagesFromFirebase
 import com.moashraf.diaryapp.utils.toInstant
 import java.time.Instant
 import java.time.ZoneId
@@ -62,31 +65,31 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
     var galleryLoading by remember { mutableStateOf(false) }
     val downloadedImages = remember { mutableStateListOf<Uri>() }
 
-//    LaunchedEffect(key1 = galleryOpened) {
-//        if (galleryOpened && downloadedImages.isEmpty()) {
-//            galleryLoading = true
-////            fetchImagesFromFirebase(
-////                remoteImagePaths = diary.images,
-////                onImageDownload = { image ->
-////                    downloadedImages.add(image)
-////                },
-////                onImageDownloadFailed = {
-////                    Toast.makeText(
-////                        context,
-////                        "Images not uploaded yet." +
-////                                "Wait a little bit, or try uploading again.",
-////                        Toast.LENGTH_SHORT
-////                    ).show()
-////                    galleryLoading = false
-////                    galleryOpened = false
-////                },
-////                onReadyToDisplay = {
-////                    galleryLoading = false
-////                    galleryOpened = true
-////                }
-////            )
-//        }
-//    }
+    LaunchedEffect(key1 = galleryOpened) {
+        if (galleryOpened && downloadedImages.isEmpty()) {
+            galleryLoading = true
+            fetchImagesFromFirebase(
+                remoteImagePaths = diary.images,
+                onImageDownload = { image ->
+                    downloadedImages.add(image)
+                },
+                onImageDownloadFailed = {
+                    Toast.makeText(
+                        context,
+                        "Images not uploaded yet." +
+                                "Wait a little bit, or try uploading again.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    galleryLoading = false
+                    galleryOpened = false
+                },
+                onReadyToDisplay = {
+                    galleryLoading = false
+                    galleryOpened = true
+                }
+            )
+        }
+    }
 
     Row(
         modifier = Modifier
@@ -141,8 +144,8 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
                     )
                 ) {
                     Column(modifier = Modifier.padding(all = 14.dp)) {
-//                        Gallery(images = downloadedImages)
-                        Gallery(images = diary.images)
+                        Gallery(images = downloadedImages)
+//                        Gallery(images = diary.images)
                     }
                 }
             }

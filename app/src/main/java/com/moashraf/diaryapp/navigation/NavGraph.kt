@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -24,10 +25,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.moashraf.diaryapp.R
-import com.moashraf.diaryapp.model.GalleryImage
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.model.RequestState
-import com.moashraf.diaryapp.model.rememberGalleryState
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
 import com.moashraf.diaryapp.presentation.screens.Home.HomeViewModel
 import com.moashraf.diaryapp.presentation.components.DisplayAlertDialog
@@ -200,12 +199,12 @@ fun NavGraphBuilder.writeRoute(
             defaultValue = null
         })
     ) {
-        val viewModel: WriteViewModel = viewModel()
+        val viewModel : WriteViewModel = hiltViewModel()
         val context = LocalContext.current
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState(pageCount = {Mood.entries.size})
         val pagerNumber by remember { derivedStateOf{pagerState.currentPage} }
-        val galleryState = rememberGalleryState()
+        val galleryState = viewModel.galleryState
 
         WriteScreen(
             uiState = uiState,
@@ -249,14 +248,13 @@ fun NavGraphBuilder.writeRoute(
             },
             galleryState = galleryState,
             onImageSelect = {
-                galleryState.addImage(
-                    galleryImage = GalleryImage(
-                        image = it,
-                        remoteImagePath = ""
-                    )
+                val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
+                viewModel.addImage(
+                    image = it,
+                    imageType = type
                 )
             },
-
+            onImageDeleteClicked = {galleryState.removeImage(it)}
         )
     }
 }
