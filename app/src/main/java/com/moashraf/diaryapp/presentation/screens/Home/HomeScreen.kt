@@ -29,7 +29,6 @@ import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,10 +42,9 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.moashraf.diaryapp.R
 import com.moashraf.diaryapp.data.repository.Diaries
-import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.RequestState
 import com.moashraf.diaryapp.presentation.screens.Home.components.TopBar
-import java.time.LocalDate
+import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -56,12 +54,15 @@ fun HomeScreen(
     diaries: Diaries,
     drawerState: DrawerState,
     onMenuClicked: () -> Unit,
+    dateIsSelected: Boolean,
+    onDateSelected: (ZonedDateTime) -> Unit,
+    onDateReset: () -> Unit,
     navigateToWrite: () -> Unit,
     navigateToWriteWithArgs: (String) -> Unit,
     onSignOutClicked: () -> Unit,
     onDeleteAllClicked: () -> Unit,
 
-) {
+    ) {
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     NavigationDrawer(
@@ -74,7 +75,10 @@ fun HomeScreen(
                 topBar = {
                     TopBar(
                         scrollBehavior = scrollBehavior,
-                        onMenuClicked = onMenuClicked
+                        onMenuClicked = onMenuClicked,
+                        dateIsSelected = dateIsSelected,
+                        onDateSelected = onDateSelected,
+                        onDateReset = onDateReset
                     )
                 },
                 floatingActionButton = {

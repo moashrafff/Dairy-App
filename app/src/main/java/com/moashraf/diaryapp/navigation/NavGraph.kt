@@ -38,7 +38,6 @@ import com.moashraf.diaryapp.utils.Constants.APP_ID
 import com.moashraf.diaryapp.utils.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -163,6 +162,9 @@ fun NavGraphBuilder.homeRoute(
                     drawerState.open()
                 }
             },
+            dateIsSelected = viewModel.dateIsSelected,
+            onDateSelected = { viewModel.getDiaries(zonedDateTime = it) },
+            onDateReset = { viewModel.getDiaries() },
             navigateToWrite = navigateToWrite,
             navigateToWriteWithArgs = navigateToWriteWithArgs,
             onSignOutClicked = {
