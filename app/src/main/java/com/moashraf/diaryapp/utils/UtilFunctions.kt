@@ -7,6 +7,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storageMetadata
+import com.moashraf.diaryapp.data.database.entity.ImageToDelete
 import com.moashraf.diaryapp.data.database.entity.ImageToUpload
 import io.realm.kotlin.types.RealmInstant
 import java.time.Instant
@@ -45,6 +46,15 @@ fun retryUploadingImageToFirebase(
         storageMetadata { },
         imageToUpload.sessionUri.toUri()
     ).addOnSuccessListener { onSuccess() }
+}
+
+fun retryDeletingImageFromFirebase(
+    imageToDelete: ImageToDelete,
+    onSuccess: () -> Unit
+) {
+    val storage = FirebaseStorage.getInstance().reference
+    storage.child(imageToDelete.remoteImagePath).delete()
+        .addOnSuccessListener { onSuccess() }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

@@ -14,7 +14,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.moashraf.diaryapp.data.database.ImageToDeleteDao
 import com.moashraf.diaryapp.data.database.ImageToUploadDao
+import com.moashraf.diaryapp.data.database.entity.ImageToDelete
 import com.moashraf.diaryapp.data.database.entity.ImageToUpload
 import com.moashraf.diaryapp.data.repository.MongoDB
 import com.moashraf.diaryapp.model.Diary
@@ -40,6 +42,7 @@ import javax.inject.Inject
 @RequiresApi(Build.VERSION_CODES.O)
 class WriteViewModel @Inject constructor(
     private val imageToUploadDao: ImageToUploadDao,
+    private val imageToDeleteDao: ImageToDeleteDao,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -170,6 +173,7 @@ class WriteViewModel @Inject constructor(
         })
         if (result is RequestState.Success) {
             uploadImageToFirebaseStorage()
+            deleteImagesFromFirebase()
             withContext(Dispatchers.Main) {
                 onSuccess()
             }
@@ -190,6 +194,9 @@ class WriteViewModel @Inject constructor(
 
                 if (result is RequestState.Success) {
                     withContext(Dispatchers.Main) {
+                        uiState.selectedDiary?.let {
+                            deleteImagesFromFirebase(images = it.images)
+                        }
                         onSuccess()
                     }
                 } else if (result is RequestState.Error) {
@@ -230,6 +237,33 @@ class WriteViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    private fun deleteImagesFromFirebase(images: List<String>? = null) {
+        val storage = FirebaseStorage.getInstance().reference
+        if (images != null) {
+            images.forEach { remotePath ->
+                storage.child(remotePath).delete()
+                    .addOnFailureListener {
+                        viewModelScope.launch(Dispatchers.IO) {
+                            imageToDeleteDao.addImageToDelete(
+                                ImageToDelete(remoteImagePath = remotePath)
+                            )
+                        }
+                    }
+            }
+        } else {
+            galleryState.imagesToBeDeleted.map { it.remoteImagePath }.forEach { remotePath ->
+                storage.child(remotePath).delete()
+                    .addOnFailureListener {
+                        viewModelScope.launch(Dispatchers.IO) {
+                            imageToDeleteDao.addImageToDelete(
+                                ImageToDelete(remoteImagePath = remotePath)
+                            )
+                        }
+                    }
+            }
         }
     }
 

@@ -254,7 +254,7 @@ fun NavGraphBuilder.writeRoute(
                     imageType = type
                 )
             },
-            onImageDeleteClicked = {}
+            onImageDeleteClicked = {galleryState.removeImage(it)}
         )
     }
 }
