@@ -1,7 +1,6 @@
 package com.moashraf.diaryapp.navigation
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -26,10 +25,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.moashraf.diaryapp.R
-import com.moashraf.diaryapp.model.GalleryImage
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.model.RequestState
-import com.moashraf.diaryapp.model.rememberGalleryState
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
 import com.moashraf.diaryapp.presentation.screens.Home.HomeViewModel
 import com.moashraf.diaryapp.presentation.components.DisplayAlertDialog
@@ -41,7 +38,6 @@ import com.moashraf.diaryapp.utils.Constants.APP_ID
 import com.moashraf.diaryapp.utils.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -258,7 +254,7 @@ fun NavGraphBuilder.writeRoute(
                     imageType = type
                 )
             },
-
+            onImageDeleteClicked = {}
         )
     }
 }
