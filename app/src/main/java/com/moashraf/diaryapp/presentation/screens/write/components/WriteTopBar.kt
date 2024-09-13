@@ -33,8 +33,8 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
 import com.moashraf.diaryapp.model.Diary
-import com.moashraf.diaryapp.presentation.components.DisplayAlertDialog
 import com.moashraf.diaryapp.utils.toInstant
+import com.moashraf.ui.components.DisplayAlertDialog
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId

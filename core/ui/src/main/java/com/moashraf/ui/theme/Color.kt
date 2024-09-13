@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.ui.theme
+package com.moashraf.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

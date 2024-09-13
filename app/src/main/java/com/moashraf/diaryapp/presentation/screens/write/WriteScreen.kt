@@ -39,11 +39,11 @@ import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.moashraf.diaryapp.model.Diary
-import com.moashraf.diaryapp.model.GalleryImage
-import com.moashraf.diaryapp.model.GalleryState
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.presentation.screens.write.components.WriteContent
 import com.moashraf.diaryapp.presentation.screens.write.components.WriteTopBar
+import com.moashraf.ui.GalleryImage
+import com.moashraf.ui.GalleryState
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalFoundationApi::class)

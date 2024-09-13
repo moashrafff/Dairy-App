@@ -20,13 +20,13 @@ import com.moashraf.diaryapp.data.database.entity.ImageToDelete
 import com.moashraf.diaryapp.data.database.entity.ImageToUpload
 import com.moashraf.diaryapp.data.repository.MongoDB
 import com.moashraf.diaryapp.model.Diary
-import com.moashraf.diaryapp.model.GalleryImage
-import com.moashraf.diaryapp.model.GalleryState
 import com.moashraf.diaryapp.model.Mood
 import com.moashraf.diaryapp.model.RequestState
 import com.moashraf.diaryapp.utils.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.moashraf.diaryapp.utils.fetchImagesFromFirebase
 import com.moashraf.diaryapp.utils.toRealmInstant
+import com.moashraf.ui.GalleryImage
+import com.moashraf.ui.GalleryState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.realm.kotlin.types.RealmInstant
 import kotlinx.coroutines.Dispatchers

@@ -46,10 +46,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.moashraf.diaryapp.model.Diary
 import com.moashraf.diaryapp.model.Mood
-import com.moashraf.diaryapp.presentation.components.Gallery
 import com.moashraf.diaryapp.ui.theme.Elevation
 import com.moashraf.diaryapp.utils.fetchImagesFromFirebase
 import com.moashraf.diaryapp.utils.toInstant
+import com.moashraf.ui.components.Gallery
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter

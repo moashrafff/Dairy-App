@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.components
+package com.moashraf.ui.components
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable

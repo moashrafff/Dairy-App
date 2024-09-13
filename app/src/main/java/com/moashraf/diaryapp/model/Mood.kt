@@ -2,22 +2,23 @@ package com.moashraf.diaryapp.model
 
 import androidx.compose.ui.graphics.Color
 import com.moashraf.diaryapp.R
-import com.moashraf.diaryapp.ui.theme.AngryColor
-import com.moashraf.diaryapp.ui.theme.AwfulColor
-import com.moashraf.diaryapp.ui.theme.BoredColor
-import com.moashraf.diaryapp.ui.theme.CalmColor
-import com.moashraf.diaryapp.ui.theme.DepressedColor
-import com.moashraf.diaryapp.ui.theme.DisappointedColor
-import com.moashraf.diaryapp.ui.theme.HappyColor
-import com.moashraf.diaryapp.ui.theme.HumorousColor
-import com.moashraf.diaryapp.ui.theme.LonelyColor
-import com.moashraf.diaryapp.ui.theme.MysteriousColor
-import com.moashraf.diaryapp.ui.theme.NeutralColor
-import com.moashraf.diaryapp.ui.theme.RomanticColor
-import com.moashraf.diaryapp.ui.theme.ShamefulColor
-import com.moashraf.diaryapp.ui.theme.SurprisedColor
-import com.moashraf.diaryapp.ui.theme.SuspiciousColor
-import com.moashraf.diaryapp.ui.theme.TenseColor
+import com.moashraf.ui.theme.AngryColor
+import com.moashraf.ui.theme.AwfulColor
+import com.moashraf.ui.theme.BoredColor
+import com.moashraf.ui.theme.CalmColor
+import com.moashraf.ui.theme.DepressedColor
+import com.moashraf.ui.theme.DisappointedColor
+import com.moashraf.ui.theme.HappyColor
+import com.moashraf.ui.theme.HumorousColor
+import com.moashraf.ui.theme.LonelyColor
+import com.moashraf.ui.theme.MysteriousColor
+import com.moashraf.ui.theme.NeutralColor
+import com.moashraf.ui.theme.RomanticColor
+import com.moashraf.ui.theme.ShamefulColor
+import com.moashraf.ui.theme.SurprisedColor
+import com.moashraf.ui.theme.SuspiciousColor
+import com.moashraf.ui.theme.TenseColor
+
 
 enum class Mood(
     val icon: Int,

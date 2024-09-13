@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.components
+package com.moashraf.ui.components
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.moashraf.diaryapp.model.GalleryImage
-import com.moashraf.diaryapp.model.GalleryState
 import com.moashraf.diaryapp.ui.theme.Elevation
+import com.moashraf.ui.GalleryImage
+import com.moashraf.ui.GalleryState
 import kotlin.math.max
 
 @Composable
