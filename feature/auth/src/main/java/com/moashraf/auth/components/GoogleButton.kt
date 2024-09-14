@@ -33,7 +33,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.moashraf.auth.R
 
 @Composable
 fun GoogleButton(
@@ -41,7 +40,7 @@ fun GoogleButton(
     loadingState: Boolean = false,
     primaryText: String = "Sign in with Google",
     secondaryText: String = "Please wait...",
-    icon: Int = R.drawable.google_logo,
+    icon: Int = com.moashraf.ui.R.drawable.google_logo,
     shape: Shape = Shapes().extraSmall,
     borderColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     backgroundColor: Color = MaterialTheme.colorScheme.surface,

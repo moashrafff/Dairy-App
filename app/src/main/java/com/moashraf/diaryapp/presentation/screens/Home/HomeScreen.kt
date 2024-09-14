@@ -150,7 +150,7 @@ fun NavigationDrawer(
                         label = {
                             Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.google_logo),
+                                    painter = painterResource(id = com.moashraf.ui.R.drawable.google_logo),
                                     contentDescription = "Google Logo",
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
