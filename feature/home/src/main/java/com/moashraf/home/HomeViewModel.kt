@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.Home
+package com.moashraf.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi

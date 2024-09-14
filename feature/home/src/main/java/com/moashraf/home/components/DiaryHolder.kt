@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.Home.components
+package com.moashraf.home.components
 
 import android.net.Uri
 import android.os.Build
@@ -153,6 +153,7 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DiaryHeader(moodName: String, time: Instant) {
     val mood by remember { mutableStateOf(Mood.valueOf(moodName)) }

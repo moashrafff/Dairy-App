@@ -1,19 +1,14 @@
-package com.moashraf.diaryapp.presentation.screens.Home
+package com.moashraf.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -25,11 +20,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.moashraf.home.components.DateHeader
+import com.moashraf.home.components.DiaryHolder
 import com.moashraf.util.model.Diary
-import com.moashraf.diaryapp.presentation.screens.Home.components.DateHeader
-import com.moashraf.diaryapp.presentation.screens.Home.components.DiaryHolder
 import java.time.LocalDate
-import java.util.Locale
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -94,6 +88,7 @@ fun EmptyPage(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun DateHeaderPreview() {

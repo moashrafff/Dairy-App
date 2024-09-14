@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.Home
+package com.moashraf.home
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -40,10 +40,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.moashraf.diaryapp.R
 import com.moashraf.util.model.RequestState
-import com.moashraf.diaryapp.presentation.screens.Home.components.TopBar
+import com.moashraf.home.components.TopBar
 import com.moashraf.mongo.mongo.repository.Diaries
+import com.moashraf.ui.R
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -150,7 +150,7 @@ fun NavigationDrawer(
                         label = {
                             Row(modifier = Modifier.padding(horizontal = 12.dp)) {
                                 Icon(
-                                    painter = painterResource(id = com.moashraf.ui.R.drawable.google_logo),
+                                    painter = painterResource(id = R.drawable.google_logo),
                                     contentDescription = "Google Logo",
                                     tint = MaterialTheme.colorScheme.onSurface
                                 )
