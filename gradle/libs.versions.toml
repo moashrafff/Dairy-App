@@ -8,13 +8,13 @@ desugar_jdk_libs = "2.0.4"
 espressoCore = "3.5.1"
 firebaseAuthKtx = "23.0.0"
 firebaseStorageKtx = "21.0.0"
-realmGradlePlugin = "2.0.0-SNAPSHOT"
+realmGradlePlugin = "2.1.0"
 hiltAndroid = "2.48"
 hiltNavigationCompose = "1.2.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 kotlinxCoroutinesCore = "1.8.0"
-librarySync = "2.0.0-SNAPSHOT"
+librarySync = "2.1.0"
 lifecycleRuntimeKtx = "2.8.1"
 material3 = "1.2.1"
 messagebarcompose = "1.0.8"
@@ -26,6 +26,10 @@ agp = "8.4.1"
 kotlin = "2.0.0"
 googleGms = "4.4.2"
 ksp = "2.0.0-1.0.21"
+appcompat = "1.7.0"
+material = "1.12.0"
+monitor = "1.7.2"
+junitKtx = "1.2.1"
 
 
 [libraries]
@@ -62,6 +66,10 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 library-sync = { module = "io.realm.kotlin:library-sync", version.ref = "librarySync" }
 messagebarcompose = { module = "com.github.stevdza-san:MessageBarCompose", version.ref = "messagebarcompose" }
 onetapcompose = { module = "com.github.stevdza-san:OneTapCompose", version.ref = "onetapcompose" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-monitor = { group = "androidx.test", name = "monitor", version.ref = "monitor" }
+androidx-junit-ktx = { group = "androidx.test.ext", name = "junit-ktx", version.ref = "junitKtx" }
 
 
 [plugins]
