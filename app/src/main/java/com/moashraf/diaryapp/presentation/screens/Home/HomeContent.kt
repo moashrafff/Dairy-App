@@ -25,7 +25,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.moashraf.diaryapp.model.Diary
+import com.moashraf.util.model.Diary
 import com.moashraf.diaryapp.presentation.screens.Home.components.DateHeader
 import com.moashraf.diaryapp.presentation.screens.Home.components.DiaryHolder
 import java.time.LocalDate
@@ -62,53 +62,6 @@ fun HomeContent(
         }
     } else {
         EmptyPage()
-    }
-}
-
-@Composable
-fun DateHeader(localDate: LocalDate) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(vertical = 14.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Column(horizontalAlignment = Alignment.End) {
-            Text(
-                text = String.format(Locale.ROOT,"%02d", localDate.dayOfMonth),
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = FontWeight.Light
-                )
-            )
-            Text(
-                text = localDate.dayOfWeek.toString().take(3),
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                    fontWeight = FontWeight.Light
-                )
-            )
-        }
-        Spacer(modifier = Modifier.width(14.dp))
-        Column(horizontalAlignment = Alignment.Start) {
-            Text(
-                text = localDate.month.toString().lowercase()
-                    .replaceFirstChar { it.titlecase() },
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                    fontWeight = FontWeight.Light
-                )
-            )
-            Text(
-                text = "${localDate.year}",
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
-                style = TextStyle(
-                    fontSize = MaterialTheme.typography.bodySmall.fontSize,
-                    fontWeight = FontWeight.Light
-                )
-            )
-        }
     }
 }
 

@@ -25,17 +25,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.moashraf.diaryapp.R
-import com.moashraf.diaryapp.model.Mood
-import com.moashraf.diaryapp.model.RequestState
+import com.moashraf.util.model.Mood
+import com.moashraf.util.model.RequestState
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
 import com.moashraf.diaryapp.presentation.screens.Home.HomeViewModel
 import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationScreen
 import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationViewModel
 import com.moashraf.diaryapp.presentation.screens.write.WriteScreen
 import com.moashraf.diaryapp.presentation.screens.write.WriteViewModel
-import com.moashraf.diaryapp.utils.Constants.APP_ID
-import com.moashraf.diaryapp.utils.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.moashraf.ui.components.DisplayAlertDialog
+import com.moashraf.util.Constants.APP_ID
+import com.moashraf.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
+import com.moashraf.util.Screen
 import com.stevdzasan.messagebar.rememberMessageBarState
 import com.stevdzasan.onetap.rememberOneTapSignInState
 import io.realm.kotlin.mongodb.App
@@ -240,7 +241,7 @@ fun NavGraphBuilder.writeRoute(
         val viewModel : WriteViewModel = hiltViewModel()
         val context = LocalContext.current
         val uiState = viewModel.uiState
-        val pagerState = rememberPagerState(pageCount = {Mood.entries.size})
+        val pagerState = rememberPagerState(pageCount = { Mood.entries.size})
         val pagerNumber by remember { derivedStateOf{pagerState.currentPage} }
         val galleryState = viewModel.galleryState
 

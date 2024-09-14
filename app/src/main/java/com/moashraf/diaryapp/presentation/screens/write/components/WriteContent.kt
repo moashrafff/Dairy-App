@@ -42,8 +42,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.moashraf.diaryapp.model.Diary
-import com.moashraf.diaryapp.model.Mood
+import com.moashraf.util.model.Diary
+import com.moashraf.util.model.Mood
 import com.moashraf.diaryapp.presentation.screens.write.UiState
 import com.moashraf.ui.GalleryImage
 import com.moashraf.ui.GalleryState

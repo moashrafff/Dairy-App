@@ -38,8 +38,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.moashraf.diaryapp.model.Diary
-import com.moashraf.diaryapp.model.Mood
+import com.moashraf.util.model.Diary
+import com.moashraf.util.model.Mood
 import com.moashraf.diaryapp.presentation.screens.write.components.WriteContent
 import com.moashraf.diaryapp.presentation.screens.write.components.WriteTopBar
 import com.moashraf.ui.GalleryImage

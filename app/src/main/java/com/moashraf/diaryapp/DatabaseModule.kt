@@ -2,9 +2,9 @@ package com.moashraf.diaryapp
 
 import android.content.Context
 import androidx.room.Room
-import com.moashraf.diaryapp.connectivity.NetworkConnectivityObserver
-import com.moashraf.diaryapp.data.database.ImageDatabase
-import com.moashraf.diaryapp.utils.Constants.IMAGES_DATABASE
+import com.moashraf.mongo.mongo.database.ImageDatabase
+import com.moashraf.util.Constants.IMAGES_DATABASE
+import com.moashraf.util.connectivity.NetworkConnectivityObserver
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

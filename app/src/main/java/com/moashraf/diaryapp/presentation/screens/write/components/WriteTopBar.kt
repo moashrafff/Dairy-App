@@ -32,9 +32,9 @@ import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.clock.ClockDialog
 import com.maxkeppeler.sheets.clock.models.ClockSelection
-import com.moashraf.diaryapp.model.Diary
-import com.moashraf.diaryapp.utils.toInstant
+import com.moashraf.util.model.Diary
 import com.moashraf.ui.components.DisplayAlertDialog
+import com.moashraf.util.toInstant
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
