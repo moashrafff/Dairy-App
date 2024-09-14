@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.authentication
+package com.moashraf.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.moashraf.diaryapp.R.*
-import com.moashraf.diaryapp.presentation.screens.authentication.components.GoogleButton
+import com.moashraf.auth.components.GoogleButton
 
 @Composable
 fun AuthenticationContent(
@@ -43,17 +42,17 @@ fun AuthenticationContent(
             ) {
                 Image(
                     modifier = Modifier.size(120.dp),
-                    painter = painterResource(id = drawable.google_logo),
+                    painter = painterResource(id = R.drawable.google_logo),
                     contentDescription = "Google Logo"
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = stringResource(id = string.auth_title),
+                    text = stringResource(id = R.string.auth_title),
                     fontSize = MaterialTheme.typography.titleLarge.fontSize
                 )
                 Text(
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                    text = stringResource(id = string.auth_subtitle),
+                    text = stringResource(id = R.string.auth_subtitle),
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize
                 )
             }

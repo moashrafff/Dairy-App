@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.authentication
+package com.moashraf.auth
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background

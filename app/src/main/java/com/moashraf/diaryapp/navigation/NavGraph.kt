@@ -17,28 +17,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.moashraf.diaryapp.R
-import com.moashraf.util.model.Mood
-import com.moashraf.util.model.RequestState
+import com.moashraf.auth.navigation.authenticationRoute
 import com.moashraf.diaryapp.presentation.screens.Home.HomeScreen
 import com.moashraf.diaryapp.presentation.screens.Home.HomeViewModel
-import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationScreen
-import com.moashraf.diaryapp.presentation.screens.authentication.AuthenticationViewModel
 import com.moashraf.diaryapp.presentation.screens.write.WriteScreen
 import com.moashraf.diaryapp.presentation.screens.write.WriteViewModel
 import com.moashraf.ui.components.DisplayAlertDialog
 import com.moashraf.util.Constants.APP_ID
 import com.moashraf.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.moashraf.util.Screen
-import com.stevdzasan.messagebar.rememberMessageBarState
-import com.stevdzasan.onetap.rememberOneTapSignInState
+import com.moashraf.util.model.Mood
+import com.moashraf.util.model.RequestState
 import io.realm.kotlin.mongodb.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -79,56 +74,6 @@ fun SetNavGraph(
             onBackPressed = {
                 navController.popBackStack()
             }
-        )
-    }
-}
-
-fun NavGraphBuilder.authenticationRoute(
-    navigateToHome: () -> Unit,
-    onDataLoaded: () -> Unit
-) {
-    composable(route = Screen.Authentication.route) {
-        val context = LocalContext.current
-        val oneTapState = rememberOneTapSignInState()
-        val messageBarState = rememberMessageBarState()
-        val viewModel: AuthenticationViewModel = viewModel()
-        val loadingState by viewModel.loadingState
-        val authenticatedState by viewModel.authenticatedState
-
-        LaunchedEffect(key1 = Unit) {
-            onDataLoaded()
-        }
-
-        AuthenticationScreen(
-            authenticationState = authenticatedState,
-            loadingState = loadingState,
-            oneTapSignInState = oneTapState,
-            messageBarState = messageBarState,
-            onClick = {
-                oneTapState.open()
-            },
-            onSuccessfulFirebaseSignIn = {
-                viewModel.signInWithGoogle(
-                    tokenID = it,
-                    onSuccess = {
-                        messageBarState.addSuccess(context.getString(R.string.successfully_authenticated))
-                        viewModel.setLoadingState(false)
-                    },
-                    onError = { exception ->
-                        messageBarState.addError(Exception(exception))
-                        viewModel.setLoadingState(false)
-                    }
-                )
-            },
-            onFailedFirebaseSignIn = {
-                messageBarState.addError(it)
-                viewModel.setLoadingState(false)
-            },
-            onDialogDismissed = { message ->
-                messageBarState.addError(Exception(message))
-                viewModel.setLoadingState(false)
-            },
-            navigateToHome = navigateToHome
         )
     }
 }

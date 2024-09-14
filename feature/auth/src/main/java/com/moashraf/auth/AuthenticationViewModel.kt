@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.authentication
+package com.moashraf.auth
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
