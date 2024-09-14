@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.write.components
+package com.moashraf.write.components
 
 import android.net.Uri
 import android.os.Build
@@ -42,19 +42,19 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.moashraf.util.model.Diary
-import com.moashraf.util.model.Mood
-import com.moashraf.diaryapp.presentation.screens.write.UiState
 import com.moashraf.ui.GalleryImage
 import com.moashraf.ui.GalleryState
 import com.moashraf.ui.components.GalleryUploader
+import com.moashraf.util.model.Diary
+import com.moashraf.util.model.Mood
+import com.moashraf.write.UiState
 import io.realm.kotlin.ext.toRealmList
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WriteContent(
+internal fun WriteContent(
     uiState: UiState,
     pagerState: PagerState,
     galleryState: GalleryState,

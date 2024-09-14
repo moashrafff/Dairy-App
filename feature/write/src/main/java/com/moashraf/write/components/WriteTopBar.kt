@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.write.components
+package com.moashraf.write.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -45,7 +45,7 @@ import java.util.Locale
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WriteTopBar(
+internal fun WriteTopBar(
     selectedDiary: Diary?,
     moodName: () -> String,
     onDateTimeUpdated: (ZonedDateTime) -> Unit,
@@ -169,7 +169,7 @@ fun WriteTopBar(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DeleteDiaryAction(
+internal fun DeleteDiaryAction(
     selectedDiary: Diary?,
     onDeleteConfirmed: () -> Unit
 ) {

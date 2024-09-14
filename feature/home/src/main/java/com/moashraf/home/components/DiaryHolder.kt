@@ -57,7 +57,7 @@ import java.util.Locale
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
+internal fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
     val localDensity = LocalDensity.current
     val context = LocalContext.current
     var componentHeight by remember { mutableStateOf(0.dp) }
@@ -155,7 +155,7 @@ fun DiaryHolder(diary: Diary, onClick: (String) -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DiaryHeader(moodName: String, time: Instant) {
+internal fun DiaryHeader(moodName: String, time: Instant) {
     val mood by remember { mutableStateOf(Mood.valueOf(moodName)) }
     val formatter = remember {
         DateTimeFormatter.ofPattern("hh:mm a", Locale.getDefault())

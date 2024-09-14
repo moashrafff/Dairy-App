@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun GoogleButton(
+internal fun GoogleButton(
     modifier: Modifier = Modifier,
     loadingState: Boolean = false,
     primaryText: String = "Sign in with Google",

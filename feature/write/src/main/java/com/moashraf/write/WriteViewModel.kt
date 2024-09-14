@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.write
+package com.moashraf.write
 
 import android.net.Uri
 import android.os.Build
@@ -40,7 +40,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 @RequiresApi(Build.VERSION_CODES.O)
-class WriteViewModel @Inject constructor(
+internal class WriteViewModel @Inject constructor(
     private val imageToUploadDao: ImageToUploadDao,
     private val imageToDeleteDao: ImageToDeleteDao,
     private val savedStateHandle: SavedStateHandle

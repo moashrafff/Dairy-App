@@ -9,7 +9,7 @@ import java.time.ZonedDateTime
 
 typealias Diaries  = RequestState<Map<LocalDate, List<Diary>>>
 
-interface MongoDBRepository {
+internal interface MongoDBRepository {
     fun configureRealm()
     fun getAllDiaries() : Flow<Diaries>
     fun getSelectedDiary(diaryId : ObjectId) : Flow<RequestState<Diary>>

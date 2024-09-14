@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp.presentation.screens.write
+package com.moashraf.write
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -40,17 +40,17 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.moashraf.util.model.Diary
 import com.moashraf.util.model.Mood
-import com.moashraf.diaryapp.presentation.screens.write.components.WriteContent
-import com.moashraf.diaryapp.presentation.screens.write.components.WriteTopBar
 import com.moashraf.ui.GalleryImage
 import com.moashraf.ui.GalleryState
+import com.moashraf.write.components.WriteContent
+import com.moashraf.write.components.WriteTopBar
 import java.time.ZonedDateTime
 
 @OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun WriteScreen(
+internal fun WriteScreen(
     uiState: UiState,
     pagerState: PagerState,
     galleryState: GalleryState,

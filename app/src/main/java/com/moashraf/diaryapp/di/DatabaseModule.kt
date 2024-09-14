@@ -1,4 +1,4 @@
-package com.moashraf.diaryapp
+package com.moashraf.diaryapp.di
 
 import android.content.Context
 import androidx.room.Room
